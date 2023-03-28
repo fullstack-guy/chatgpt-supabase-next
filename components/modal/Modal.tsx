@@ -2,13 +2,16 @@ import { IconXboxX } from "@tabler/icons-react";
 import { motion } from "framer-motion";
 import { FC, useRef } from "react";
 
+import classNames from "classnames";
+
 interface Props {
   closeModal: () => void;
   text: string;
   children: any;
+  isOnCharacter?: boolean;
 }
 
-const Modal: FC<Props> = ({ closeModal, children, text }) => {
+const Modal: FC<Props> = ({ closeModal, children, text, isOnCharacter }) => {
   const ref = useRef(null);
 
   // Close modal when clicking outside of ref
@@ -84,15 +87,23 @@ const Modal: FC<Props> = ({ closeModal, children, text }) => {
             animate="visible"
             exit="hidden"
             ref={ref}
-            className="inline-block w-full align-bottom bg-slate-800 rounded-lg px-4 pt-5 pb-4 text-left shadow-xl sm:my-8 sm:align-middle sm:p-6 max-w-sm opacity-100 translate-y-0 sm:scale-100"
+            className={classNames(
+              "inline-block w-full align-bottom rounded-lg px-4 pt-5 pb-4 text-left shadow-xl sm:my-8 sm:align-middle sm:p-6 opacity-100 translate-y-0 sm:scale-100",
+              {
+                "max-w-sm bg-slate-800": !isOnCharacter,
+                "max-w-lg bg-white text-black": isOnCharacter,
+              }
+            )}
           >
             {/* headline */}
-            <div className="flex justify-between items-center pb-4">
-              <h3 className="text-lg leading-6 font-medium text-zinc-200">
-                Select a {text}
-              </h3>
-              <IconXboxX className="cursor-pointer" onClick={closeModal} />
-            </div>
+            {!isOnCharacter && (
+              <div className="flex justify-between items-center pb-4">
+                <h3 className="text-lg leading-6 font-medium text-zinc-200">
+                  Select a {text}
+                </h3>
+                <IconXboxX className="cursor-pointer" onClick={closeModal} />
+              </div>
+            )}
 
             {/* model item  */}
             {children}
